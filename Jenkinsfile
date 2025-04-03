@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REMOTE_USER = "ec2-user"
-        REMOTE_HOST = "3.230.145.189"
+        REMOTE_HOST = "3.238.190.154"
         PEM_FILE = "/var/lib/jenkins/cineinterval-key.pem"
         APP_PASSWORD = "Welcome123"  // 🔐 Injected securely here
     }
