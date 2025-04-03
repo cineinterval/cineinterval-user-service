@@ -15,6 +15,20 @@ pipeline {
             }
         }
 
+        stage('Security Scan') {
+            steps {
+                sh '''
+                echo "Running simulated security scan..."
+                if grep -i 'password' index.html; then
+                    echo "❌ Password found in code!"
+                    exit 1
+                else
+                    echo "✅ No secrets found."
+                fi
+                '''
+            }
+        }
+
         stage('Deploy to user-ec2') {
             steps {
                 sh """
