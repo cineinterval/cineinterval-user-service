@@ -5,6 +5,7 @@ pipeline {
         REMOTE_USER = "ec2-user"
         REMOTE_HOST = "3.230.145.189"
         PEM_FILE = "/var/lib/jenkins/cineinterval-key.pem"
+        APP_PASSWORD = "Welcome123"  // 🔐 Injected securely here
     }
 
     stages {
@@ -20,11 +21,19 @@ pipeline {
                 sh '''
                 echo "Running simulated security scan..."
                 if grep -i 'password' index.html; then
-                    echo "❌ Password found in code!"
+                    echo "❌ Hardcoded password found!"
                     exit 1
                 else
-                    echo "✅ No secrets found."
+                    echo "✅ No hardcoded passwords."
                 fi
+                '''
+            }
+        }
+
+        stage('Show Injected Password (Simulated Runtime Use)') {
+            steps {
+                sh '''
+                echo "Simulated runtime password is: $APP_PASSWORD"
                 '''
             }
         }
