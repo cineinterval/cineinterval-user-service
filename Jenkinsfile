@@ -5,7 +5,6 @@ pipeline {
         REMOTE_USER = "ec2-user"
         REMOTE_HOST = "54.84.71.226"
         PEM_FILE = "/var/lib/jenkins/cineinterval-key.pem"
-        APP_PASSWORD = "Welcome123"  // 🔐 Injected securely here
     }
 
     stages {
@@ -30,10 +29,13 @@ pipeline {
             }
         }
 
-        stage('Show Injected Password (Simulated Runtime Use)') {
+        stage('Fetch Secret from AWS Secrets Manager') {
             steps {
+                script {
+                    env.APP_PASSWORD = sh(script: "aws secretsmanager get-secret-value --secret-id cineinterval/user-service-password --query SecretString --output text", returnStdout: true).trim()
+                }
                 sh '''
-                echo "Simulated runtime password is: $APP_PASSWORD"
+                echo "🟢 Secret fetched from AWS: $APP_PASSWORD"
                 '''
             }
         }
